@@ -1,1 +1,4 @@
 *.pkl
+mlflow.db
+.DS_Store
+__pycache__/
