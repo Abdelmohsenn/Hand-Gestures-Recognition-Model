@@ -1,0 +1,23 @@
+artifact_path: /Users/muhammadabdelmohsen/Desktop/PersonalGrowth/ITI/ML1/FinalProject/mlruns/1/models/m-533b4614ac6f4587b9891805e18b67ec/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.11.5
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.0
+    skops_trusted_types: null
+mlflow_version: 3.10.1
+model_id: m-533b4614ac6f4587b9891805e18b67ec
+model_size_bytes: 2767132
+model_uuid: m-533b4614ac6f4587b9891805e18b67ec
+prompts: null
+run_id: 3c68409024e74a9e8e48569a4baa3118
+utc_time_created: '2026-03-06 22:47:29.408972'
