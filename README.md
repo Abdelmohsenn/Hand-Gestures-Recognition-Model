@@ -135,7 +135,7 @@ Additional supporting metrics:
 ### Local Comparison Plot (Notebook)
 A final comparison plot was also produced locally in the notebook to visualize accuracy and F1 across models.
 
-![MLflow Runs](assets/all.png)
+![MLflow Runs](assets/All.png)
 
 
 #### Model Performance Summary (Test Set)
