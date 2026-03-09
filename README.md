@@ -4,6 +4,7 @@
 > **Dataset:** HaGRID Hand Gesture Landmarks (MediaPipe 21 landmarks, 3D)  
 > **Tracking:** MLflow (runs, metrics, artifacts, model registry)  
 
+Full Dataset Link: [HaGRID Dataset](https://www.kaggle.com/datasets/kapitanov/hagrid)
 ---
 
 ## 1) Project Overview
@@ -12,9 +13,9 @@ This project performs **hand gesture classification** using **MediaPipe hand lan
 Each sample contains **21 landmarks** with **(x, y, z)** coordinates → **63 numerical features**, and a **gesture label** as the target.
 
 The workflow includes:
-- Loading and exploring the landmark dataset
-- Normalizing landmarks for scale and translation invariance
-- Training multiple ML models (Random Forest, KNN, XGBoost, SVM, Ensemble-Voting)
+- Loading and exploring the dataset
+- Normalizing landmarks
+- Training 5 ML models (Random Forest, KNN, XGBoost, SVM, Ensemble-Voting)
 - Tracking each experiment run using **MLflow**
 - Comparing models using MLflow charts and selecting the best model
 - Registering the best model in the **MLflow Model Registry**
@@ -45,28 +46,24 @@ To make the model robust across different hand sizes and positions, landmarks we
 1. **Translation normalization:** subtract wrist landmark (landmark 0) from all landmarks  
 2. **Scale normalization:** divide by hand size (norm of landmark 12) to normalize scale
 
-This provides:
-- position invariance
-- scale invariance
-
 ---
 
 ## 4) Models Trained
 
 The following models were trained and evaluated:
 
-- **Random Forest**
-- **KNN**
-- **XGBoost**
-- **SVM (RBF)**
-- **Voting Classifier (Soft Voting)** — Ensemble of RF + XGB + KNN + SVM
+1 - **Random Forest**
+2 - **KNN**
+3 - **XGBoost**
+4 - **SVM (RBF)**
+5 - **Voting Classifier** — Ensemble of RF + XGB + KNN + SVM using soft voting
 
 Each model was evaluated using:
 - Train Accuracy
 - Test Accuracy
-- Precision (macro)
-- Recall (macro)
-- F1-score (macro)
+- Precision
+- Recall 
+- F1-score 
 - Confusion Matrix
 ---
 
@@ -79,12 +76,13 @@ Each model was evaluated using:
 All MLflow functionality is placed in a dedicated script:
 - `mlflowFuncs.py`
 
-This script contains the following helper methods:
+This script contains the following methods:
 - `startMlflowExperiment(name)`
 - `log_experiment(run_name, model, params, metrics, artifacts, model_name)`
 - `get_best_run(experiment_name, metric=...)`
 - `register_best_model(run_id, model_name, registered_name)`
 
+###### no mlflow functions are called in the notebook directly.
 ---
 
 ## 6) Run Naming Convention (Representative Names)
@@ -112,7 +110,7 @@ Artifacts are stored in MLflow under each run.
 Here is an example of the artifacts view for a run that i logged manually:
 ![MLflow Runs](Screenshots/ArtifactsLog.png)
 
-#### and here is the default artifacts that was logged along with the model itself (MLmodel, conda.yaml, model.pkl):
+#### and here is the default artifacts that was logged along with the model itself (MLmodel, conda.yaml, model.pkl, etc..):
 
 ![MLflow Runs](Screenshots/ModelArtifacts.png)
 ---
@@ -124,8 +122,8 @@ Models were compared using MLflow’s metrics and charts to determine the best c
 
 **Primary metric for selection:** `test_accuracy`  
 Additional supporting metrics:
-- macro F1-score
-- per-class behavior (especially for confusing gestures)
+- F1-score
+- per-class behavior
 - confusion matrix quality
 
 ![MLflow Runs](Screenshots/General Comparison.png)
@@ -154,9 +152,16 @@ A final comparison plot was also produced locally in the notebook to visualize a
 
 ### Best Model (Selected)
 The best run was selected using:
-- `get_best_run("Hand_Gesture_Recognition", metric="test_accuracy")`
+- `get_best_run("Hand_Gesture_Recognition", metric="test_accuracy")` which was in mlflowFuncs.py
 
-Then registered to MLflow Model Registry as:
+The **Voting Classifier** was the model selected for registration because it achieved the **highest test accuracy (98.42%)**.
+
+In addition to the highest test accuracy, it had:
+
+- **strong macro F1-score (98.37%)**, indicating balanced performance across all gesture classes.
+- **Stable predictions across similar gesture categories**, as observed in the confusion matrix in the notebook.
+
+Then I registered it to MLflow Model Registry as:
 
 - **Registered Model Name:** `HaGRID_HandGesture_Classifier`
 - **Model Artifact Name:** `Voting_Ensemble_Model`
