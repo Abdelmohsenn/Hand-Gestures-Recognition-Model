@@ -197,14 +197,6 @@ The selected model was placed into the registry and versioned.
 └── README.md
 
 ````
-
-> **screenshots/** folder contains MLflow UI screenshots:
-- run list
-- metrics comparisons
-- artifacts view
-- registered model page
-- model version page
-
 ---
 
 ## 11) How to Run
